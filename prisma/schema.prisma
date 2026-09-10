@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// Single admin account that owns this deployment (one instance = one resume owner).
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+/// The resume owner's public info shown at the top of the timeline page.
+model Profile {
+  id          String   @id @default(cuid())
+  name        String
+  headline    String? // e.g. "Product Designer"
+  bio         String?
+  avatarUrl   String?
+  email       String?
+  phone       String?
+  location    String?
+  linkedinUrl String?
+  githubUrl   String?
+  websiteUrl  String?
+  updatedAt   DateTime @updatedAt
+}
+
+enum TimelineItemType {
+  EXPERIENCE
+  EDUCATION
+  PROJECT
+  CERTIFICATION
+  OTHER
+}
+
+/// One entry on the horizontal timeline (a job, a degree, a project, etc.)
+model TimelineItem {
+  id          String           @id @default(cuid())
+  type        TimelineItemType @default(EXPERIENCE)
+  title       String // role or degree title
+  subtitle    String? // company or institution
+  description String?
+  location    String?
+  imageUrl    String?
+  startDate   DateTime
+  endDate     DateTime? // null = "present" / ongoing
+  skills      String[]         @default([])
+  sortOrder   Int              @default(0)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@index([startDate])
+}
