@@ -1,14 +1,14 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Mail, Phone, MapPin, Link2, Globe } from "lucide-react";
-import type { TextColorOption } from "@/lib/appearance";
+import { getCardBackground, DEFAULT_APPEARANCE, type Appearance } from "@/lib/appearance";
 import type { Profile } from "@/generated/prisma/client";
 
 export function ProfileHeader({
   profile,
-  textColor = "black",
+  appearance = DEFAULT_APPEARANCE,
 }: {
   profile: Profile | null;
-  textColor?: TextColorOption;
+  appearance?: Appearance;
 }) {
   if (!profile) {
     return (
@@ -35,11 +35,12 @@ export function ProfileHeader({
     Boolean(link.href)
   );
 
-  const borderClass = textColor === "white" ? "border-white/20" : "border-black/10";
-
   return (
-    <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:items-start sm:text-left">
-      <Avatar className={`h-24 w-24 border ${borderClass}`}>
+    <div
+      className="flex flex-col items-center gap-4 rounded-xl border border-current/10 p-6 text-center shadow-sm backdrop-blur-sm sm:flex-row sm:items-start sm:p-8 sm:text-left"
+      style={{ backgroundColor: getCardBackground(appearance) }}
+    >
+      <Avatar className="h-24 w-24 border border-current/20">
         <AvatarImage src={profile.avatarUrl ?? undefined} alt={profile.name} />
         <AvatarFallback className="text-xl">{initials}</AvatarFallback>
       </Avatar>
