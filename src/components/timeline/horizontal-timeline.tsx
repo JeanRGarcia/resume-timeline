@@ -3,11 +3,18 @@
 import { useRef, type WheelEvent } from "react";
 import { motion } from "framer-motion";
 import { TimelineCard } from "@/components/timeline/timeline-card";
+import type { Appearance } from "@/lib/appearance";
 import type { TimelineItem } from "@/generated/prisma/client";
 
 const ITEM_WIDTH = 340;
 
-export function HorizontalTimeline({ items }: { items: TimelineItem[] }) {
+export function HorizontalTimeline({
+  items,
+  appearance,
+}: {
+  items: TimelineItem[];
+  appearance: Appearance;
+}) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   function handleWheel(event: WheelEvent<HTMLDivElement>) {
@@ -24,8 +31,20 @@ export function HorizontalTimeline({ items }: { items: TimelineItem[] }) {
       onWheel={handleWheel}
       className="hidden overflow-x-auto pb-6 pt-2 sm:block [scrollbar-width:thin]"
     >
-      <div className="relative flex h-[420px] w-max px-10">
-        <div className="pointer-events-none absolute left-0 right-0 top-1/2 h-px -translate-y-1/2 bg-border" />
+      <div
+        className="relative flex h-[420px] w-max px-10"
+        style={
+          appearance.backgroundImageUrl
+            ? {
+                backgroundImage: `url(${appearance.backgroundImageUrl})`,
+                backgroundRepeat: "repeat-x",
+                backgroundSize: "auto 100%",
+                backgroundPosition: "left center",
+              }
+            : undefined
+        }
+      >
+        <div className="pointer-events-none absolute left-0 right-0 top-1/2 h-px -translate-y-1/2 bg-current opacity-20" />
         {items.map((item, index) => {
           const isTop = index % 2 === 0;
           return (
@@ -48,12 +67,12 @@ export function HorizontalTimeline({ items }: { items: TimelineItem[] }) {
                     viewport={{ once: true, margin: "0px -80px 0px -80px" }}
                     transition={{ duration: 0.4 }}
                   >
-                    <TimelineCard item={item} />
+                    <TimelineCard item={item} appearance={appearance} />
                   </motion.div>
                 )}
               </div>
 
-              <div className="relative z-10 h-4 w-4 flex-shrink-0 rounded-full border-4 border-background bg-primary shadow" />
+              <div className="relative z-10 h-4 w-4 flex-shrink-0 rounded-full bg-current shadow" />
 
               <div
                 className={
@@ -69,7 +88,7 @@ export function HorizontalTimeline({ items }: { items: TimelineItem[] }) {
                     viewport={{ once: true, margin: "0px -80px 0px -80px" }}
                     transition={{ duration: 0.4 }}
                   >
-                    <TimelineCard item={item} />
+                    <TimelineCard item={item} appearance={appearance} />
                   </motion.div>
                 )}
               </div>

@@ -33,7 +33,14 @@ model Profile {
   linkedinUrl String?
   githubUrl   String?
   websiteUrl  String?
-  updatedAt   DateTime @updatedAt
+
+  // Appearance: lets each deployment restyle the public page to match its owner.
+  backgroundColor     String? // hex, page/scene background
+  backgroundImageUrl  String? // scrolls together with the horizontal timeline, sidescroller-style
+  cardBackgroundColor String? // hex, background of each timeline card
+  textColor           String  @default("black") // "black" | "white"
+
+  updatedAt DateTime @updatedAt
 }
 
 enum TimelineItemType {

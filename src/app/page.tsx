@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { ProfileHeader } from "@/components/profile-header";
 import { Timeline } from "@/components/timeline/timeline";
+import { getAppearance, TEXT_COLOR_VALUES } from "@/lib/appearance";
 
 export const dynamic = "force-dynamic";
 
@@ -12,10 +13,22 @@ export default async function Home() {
     }),
   ]);
 
+  const appearance = getAppearance(profile);
+
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-10 px-4 py-12 sm:px-8">
-      <ProfileHeader profile={profile} />
-      <Timeline items={items} />
-    </main>
+    <div
+      className="min-h-screen flex-1"
+      style={{
+        backgroundColor: appearance.backgroundColor ?? undefined,
+        color: TEXT_COLOR_VALUES[appearance.textColor],
+      }}
+    >
+      <div className="mx-auto w-full max-w-5xl px-4 pt-12 sm:px-8">
+        <ProfileHeader profile={profile} textColor={appearance.textColor} />
+      </div>
+      <div className="mt-10">
+        <Timeline items={items} appearance={appearance} />
+      </div>
+    </div>
   );
 }

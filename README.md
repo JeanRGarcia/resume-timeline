@@ -18,6 +18,7 @@ conteúdo por um painel administrativo — sem precisar mexer em código.
 - Painel `/admin` protegido por login para editar perfil e itens da timeline
 - Upload de foto de perfil e imagens dos itens
 - Importação de experiências e formação a partir do arquivo de dados exportado do LinkedIn (com fallback manual)
+- Aparência customizável: cor do texto (preto/branco), cor de fundo, cor dos cards e uma imagem de fundo que rola junto com a timeline horizontal (efeito sidescroller)
 
 ## Rodando localmente
 

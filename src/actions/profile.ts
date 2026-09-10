@@ -16,6 +16,12 @@ const profileSchema = z.object({
   linkedinUrl: z.string().optional(),
   githubUrl: z.string().optional(),
   websiteUrl: z.string().optional(),
+  textColor: z.enum(["black", "white"]).default("black"),
+  backgroundColorEnabled: z.string().optional(),
+  backgroundColor: z.string().optional(),
+  backgroundImageUrl: z.string().optional(),
+  cardBackgroundColorEnabled: z.string().optional(),
+  cardBackgroundColor: z.string().optional(),
 });
 
 export type ProfileFormState = { error?: string } | undefined;
@@ -32,15 +38,32 @@ export async function updateProfile(
     return { error: parsed.error.issues[0]?.message ?? "Dados inválidos." };
   }
 
-  const data = Object.fromEntries(
-    Object.entries(parsed.data).map(([key, value]) => [key, value || null])
-  ) as Record<string, string | null>;
+  const {
+    backgroundColorEnabled,
+    cardBackgroundColorEnabled,
+    backgroundColor,
+    cardBackgroundColor,
+    backgroundImageUrl,
+    textColor,
+    ...rest
+  } = parsed.data;
+
+  const data = {
+    ...Object.fromEntries(
+      Object.entries(rest).map(([key, value]) => [key, value || null])
+    ),
+    name: parsed.data.name,
+    textColor,
+    backgroundColor: backgroundColorEnabled ? backgroundColor || null : null,
+    cardBackgroundColor: cardBackgroundColorEnabled ? cardBackgroundColor || null : null,
+    backgroundImageUrl: backgroundImageUrl || null,
+  };
 
   const existing = await prisma.profile.findFirst();
   if (existing) {
-    await prisma.profile.update({ where: { id: existing.id }, data: { ...data, name: parsed.data.name } });
+    await prisma.profile.update({ where: { id: existing.id }, data });
   } else {
-    await prisma.profile.create({ data: { ...data, name: parsed.data.name } });
+    await prisma.profile.create({ data });
   }
 
   revalidatePath("/");
