@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, type WheelEvent } from "react";
+import { useRef, type RefObject, type UIEvent, type WheelEvent } from "react";
 import { motion } from "framer-motion";
 import { TimelineCard } from "@/components/timeline/timeline-card";
 import type { Appearance } from "@/lib/appearance";
@@ -11,11 +11,19 @@ const ITEM_WIDTH = 340;
 export function HorizontalTimeline({
   items,
   appearance,
+  bgRef,
 }: {
   items: TimelineItem[];
   appearance: Appearance;
+  bgRef?: RefObject<HTMLDivElement | null>;
 }) {
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  function syncBackground(scrollLeft: number) {
+    if (bgRef?.current) {
+      bgRef.current.style.backgroundPositionX = `${-scrollLeft}px`;
+    }
+  }
 
   function handleWheel(event: WheelEvent<HTMLDivElement>) {
     const el = scrollRef.current;
@@ -25,25 +33,18 @@ export function HorizontalTimeline({
     event.preventDefault();
   }
 
+  function handleScroll(event: UIEvent<HTMLDivElement>) {
+    syncBackground(event.currentTarget.scrollLeft);
+  }
+
   return (
     <div
       ref={scrollRef}
       onWheel={handleWheel}
+      onScroll={handleScroll}
       className="hidden overflow-x-auto pb-6 pt-2 sm:block [scrollbar-width:thin]"
     >
-      <div
-        className="relative flex h-[420px] w-max px-10"
-        style={
-          appearance.backgroundImageUrl
-            ? {
-                backgroundImage: `url(${appearance.backgroundImageUrl})`,
-                backgroundRepeat: "repeat-x",
-                backgroundSize: "auto 100%",
-                backgroundPosition: "left center",
-              }
-            : undefined
-        }
-      >
+      <div className="relative flex h-[420px] w-max px-10">
         <div className="pointer-events-none absolute left-0 right-0 top-1/2 h-px -translate-y-1/2 bg-current opacity-20" />
         {items.map((item, index) => {
           const isTop = index % 2 === 0;

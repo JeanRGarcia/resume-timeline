@@ -18,10 +18,7 @@ export default async function Home() {
   return (
     <div
       className="min-h-screen flex-1"
-      style={{
-        backgroundColor: appearance.backgroundColor ?? undefined,
-        color: TEXT_COLOR_VALUES[appearance.textColor],
-      }}
+      style={{ color: TEXT_COLOR_VALUES[appearance.textColor] }}
     >
       <div className="mx-auto w-full max-w-5xl px-4 pt-12 sm:px-8">
         <ProfileHeader profile={profile} textColor={appearance.textColor} />

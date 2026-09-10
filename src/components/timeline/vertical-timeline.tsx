@@ -10,18 +10,7 @@ export function VerticalTimeline({
   appearance: Appearance;
 }) {
   return (
-    <div
-      className="block space-y-6 px-4 py-6 sm:hidden"
-      style={
-        appearance.backgroundImageUrl
-          ? {
-              backgroundImage: `url(${appearance.backgroundImageUrl})`,
-              backgroundRepeat: "repeat",
-              backgroundSize: "auto 300px",
-            }
-          : undefined
-      }
-    >
+    <div className="block space-y-6 px-4 py-6 sm:hidden">
       {items.map((item) => (
         <div key={item.id} className="relative pl-6">
           <div className="absolute left-0 top-2 h-3 w-3 rounded-full bg-current" />
