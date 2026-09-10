@@ -7,7 +7,7 @@ conteúdo por um painel administrativo — sem precisar mexer em código.
 ## Stack
 
 - [Next.js](https://nextjs.org) (App Router) + TypeScript
-- [Prisma](https://www.prisma.io) + PostgreSQL (ex: [Vercel Postgres](https://vercel.com/storage/postgres))
+- [Prisma](https://www.prisma.io) (ORM) + PostgreSQL via [Neon](https://neon.tech) (banco recomendado — conecta pela aba Storage da Vercel)
 - [Auth.js](https://authjs.dev) (login único do administrador)
 - [Vercel Blob](https://vercel.com/storage/blob) (upload de imagens)
 - Tailwind CSS + shadcn/ui + Framer Motion
