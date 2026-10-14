@@ -3,7 +3,7 @@
 import { put } from "@vercel/blob";
 import { auth } from "@/lib/auth";
 
-const MAX_SIZE_BYTES = 5 * 1024 * 1024;
+const MAX_SIZE_BYTES = 4 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 
 export async function uploadImage(
@@ -20,7 +20,7 @@ export async function uploadImage(
     return { error: "Formato de imagem não suportado." };
   }
   if (file.size > MAX_SIZE_BYTES) {
-    return { error: "Imagem maior que 5MB." };
+    return { error: "Imagem maior que 4MB." };
   }
   if (!process.env.BLOB_READ_WRITE_TOKEN) {
     return {
@@ -29,10 +29,14 @@ export async function uploadImage(
     };
   }
 
-  const blob = await put(`timeline/${Date.now()}-${file.name}`, file, {
-    access: "public",
-    addRandomSuffix: true,
-  });
-
-  return { url: blob.url };
+  try {
+    const blob = await put(`timeline/${Date.now()}-${file.name}`, file, {
+      access: "public",
+      addRandomSuffix: true,
+    });
+    return { url: blob.url };
+  } catch (error) {
+    console.error("Blob upload failed:", error);
+    return { error: "Não foi possível enviar a imagem. Tente novamente." };
+  }
 }

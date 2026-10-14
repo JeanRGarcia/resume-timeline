@@ -23,18 +23,24 @@ export function ImageUploadField({
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (!file) return;
+    // Reset so picking the same file again (e.g. retry after an error) fires onChange.
+    event.target.value = "";
 
     const formData = new FormData();
     formData.set("file", file);
 
     startTransition(async () => {
-      const result = await uploadImage(formData);
-      if ("error" in result) {
-        toast.error(result.error);
-        return;
+      try {
+        const result = await uploadImage(formData);
+        if ("error" in result) {
+          toast.error(result.error);
+          return;
+        }
+        setUrl(result.url);
+        toast.success("Imagem enviada.");
+      } catch {
+        toast.error("Falha ao enviar a imagem. Verifique o tamanho (máx. 4MB) e tente de novo.");
       }
-      setUrl(result.url);
-      toast.success("Imagem enviada.");
     });
   }
 
