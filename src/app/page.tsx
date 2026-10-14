@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { ProfileHeader } from "@/components/profile-header";
 import { Timeline } from "@/components/timeline/timeline";
+import { RootCanvasStyle } from "@/components/root-canvas-style";
 import { getAppearance, TEXT_COLOR_VALUES } from "@/lib/appearance";
 
 export const dynamic = "force-dynamic";
@@ -41,9 +42,9 @@ export default async function Home() {
   return (
     <div
       className="min-h-screen flex-1"
-      data-text-color={appearance.textColor}
       style={{ color: TEXT_COLOR_VALUES[appearance.textColor] }}
     >
+      <RootCanvasStyle appearance={appearance} />
       <div className="mx-auto w-full max-w-5xl px-4 pt-12 sm:px-8">
         <ProfileHeader profile={profile} appearance={appearance} />
       </div>

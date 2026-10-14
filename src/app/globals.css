@@ -139,18 +139,6 @@
   scrollbar-color: color-mix(in srgb, currentColor 40%, transparent) transparent;
 }
 
-/* The page's own (vertical) scrollbar belongs to <html>, which can't see the
-   wrapper's text color, so the public page marks itself with data-text-color. */
-html:has([data-text-color="black"]) {
-  scrollbar-width: thin;
-  scrollbar-color: rgb(0 0 0 / 0.35) transparent;
-}
-
-html:has([data-text-color="white"]) {
-  scrollbar-width: thin;
-  scrollbar-color: rgb(255 255 255 / 0.4) transparent;
-}
-
 /* Browsers without the standard scrollbar-color (older Safari) only understand
    the WebKit pseudo-elements. */
 @supports not (scrollbar-color: auto) {
