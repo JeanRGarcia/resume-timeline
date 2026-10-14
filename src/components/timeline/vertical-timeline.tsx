@@ -15,7 +15,7 @@ export function VerticalTimeline({
         <div key={item.id} className="relative pl-6">
           <div className="absolute left-0 top-2 h-3 w-3 rounded-full bg-current" />
           <div className="absolute left-[5px] top-5 bottom-[-24px] w-px bg-current opacity-20 last:hidden" />
-          <TimelineCard item={item} appearance={appearance} />
+          <TimelineCard item={item} appearance={appearance} uniformHeight={false} />
         </div>
       ))}
     </div>

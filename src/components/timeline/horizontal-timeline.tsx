@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, type RefObject, type UIEvent, type WheelEvent } from "react";
+import { Fragment, useRef, type RefObject, type UIEvent, type WheelEvent } from "react";
 import { motion } from "framer-motion";
 import { TimelineCard } from "@/components/timeline/timeline-card";
 import type { Appearance } from "@/lib/appearance";
@@ -44,56 +44,45 @@ export function HorizontalTimeline({
       onScroll={handleScroll}
       className="hidden overflow-x-auto pb-6 pt-2 sm:block [scrollbar-width:thin]"
     >
-      <div className="relative flex h-[420px] w-max px-10">
-        <div className="pointer-events-none absolute left-0 right-0 top-1/2 h-px -translate-y-1/2 bg-current opacity-20" />
+      {/*
+        Three grid rows: cards above, the line with the dots, cards below. The dots live
+        in their own row, so a taller (or expanded) card only grows its own row and can
+        never push a dot off the line. Each row is as tall as its tallest card.
+      */}
+      <div
+        className="grid w-max px-10"
+        style={{ gridTemplateColumns: `repeat(${items.length}, ${ITEM_WIDTH}px)` }}
+      >
+        <div
+          className="pointer-events-none -mx-10 h-px self-center bg-current opacity-20"
+          style={{ gridRow: 2, gridColumn: "1 / -1" }}
+        />
         {items.map((item, index) => {
           const isTop = index % 2 === 0;
+          const column = index + 1;
           return (
-            <div
-              key={item.id}
-              className="relative flex h-full flex-shrink-0 flex-col items-center"
-              style={{ width: ITEM_WIDTH }}
-            >
+            <Fragment key={item.id}>
               <div
-                className={
-                  isTop
-                    ? "flex flex-1 items-end justify-center pb-6"
-                    : "flex-1"
-                }
+                className={`flex justify-center ${isTop ? "items-end pb-6" : "items-start pt-6"}`}
+                style={{ gridRow: isTop ? 1 : 3, gridColumn: column }}
               >
-                {isTop && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 16 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "0px -80px 0px -80px" }}
-                    transition={{ duration: 0.4 }}
-                  >
-                    <TimelineCard item={item} appearance={appearance} />
-                  </motion.div>
-                )}
+                <motion.div
+                  initial={{ opacity: 0, y: isTop ? 16 : -16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "0px -80px 0px -80px" }}
+                  transition={{ duration: 0.4 }}
+                >
+                  <TimelineCard item={item} appearance={appearance} />
+                </motion.div>
               </div>
 
-              <div className="relative z-10 h-4 w-4 flex-shrink-0 rounded-full bg-current shadow" />
-
               <div
-                className={
-                  !isTop
-                    ? "flex flex-1 items-start justify-center pt-6"
-                    : "flex-1"
-                }
+                className="relative z-10 flex justify-center"
+                style={{ gridRow: 2, gridColumn: column }}
               >
-                {!isTop && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -16 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "0px -80px 0px -80px" }}
-                    transition={{ duration: 0.4 }}
-                  >
-                    <TimelineCard item={item} appearance={appearance} />
-                  </motion.div>
-                )}
+                <div className="h-4 w-4 rounded-full bg-current shadow" />
               </div>
-            </div>
+            </Fragment>
           );
         })}
       </div>
