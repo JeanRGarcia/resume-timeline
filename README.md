@@ -74,7 +74,9 @@ próprio) e edita o conteúdo por um painel administrativo, sem precisar mexer e
      brigando pelo nome — vá em **Settings → Environment Variables**, delete a variável de
      exemplo e tente conectar o banco de novo.
    - **Create Database → Blob**, conecte ao projeto (preenche `BLOB_READ_WRITE_TOKEN`
-     automaticamente). Sem isso, upload de imagens não funciona em produção.
+     automaticamente). Sem isso, upload de imagens não funciona em produção. Crie o store
+     com acesso **Público**: o código envia com `access: "public"`, e um store privado faz o
+     upload falhar com *Cannot use public access on a private store*.
 4. Em **Settings → Environment Variables**, adicione manualmente:
    - `AUTH_SECRET` (gere com `npx auth secret` ou `openssl rand -base64 32`)
    - `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_NAME` (usados só uma vez, pelo seed, pra criar
@@ -82,6 +84,23 @@ próprio) e edita o conteúdo por um painel administrativo, sem precisar mexer e
    - Marque **Production**, **Preview** e **Development** em cada uma.
 5. Faça o deploy. As migrations do Prisma rodam automaticamente durante o build
    (`prisma migrate deploy && next build`), então o banco já fica com as tabelas certas.
+
+   As migrations usam a conexão **direta** do Neon (`DATABASE_URL_UNPOOLED`, criada pela
+   integração junto com a `DATABASE_URL`), enquanto o app em si continua na conexão com
+   pooler. O motivo: o Prisma trava o banco com um *advisory lock* do Postgres ao migrar, e
+   esse lock não é confiável através do pooler (PgBouncer) — ele pode ficar preso e fazer
+   todos os builds seguintes falharem com `P1002: Timed out trying to acquire a postgres
+   advisory lock`. Em provedores que não definem essa variável, o projeto usa a
+   `DATABASE_URL` normalmente.
+
+   Se mesmo assim um build falhar com esse erro, há um lock preso. No SQL Editor do Neon,
+   libere-o e faça um novo deploy:
+
+   ```sql
+   SELECT pg_terminate_backend(pid)
+   FROM pg_locks
+   WHERE locktype = 'advisory' AND pid <> pg_backend_pid();
+   ```
 6. Crie sua conta de admin no banco de produção (o deploy só cria as tabelas, não os dados).
    Localmente, na pasta do projeto:
 
