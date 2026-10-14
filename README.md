@@ -1,8 +1,12 @@
-# Currículo Timeline
+# Resume Timeline
 
-Um currículo em formato de linha do tempo horizontal. Cada pessoa que usar este
-template faz o próprio deploy (Vercel + banco de dados próprio) e edita o
-conteúdo por um painel administrativo — sem precisar mexer em código.
+Currículo em linha do tempo horizontal com painel admin, personalização visual e
+importação de dados do LinkedIn. Next.js, TypeScript, Prisma e PostgreSQL.
+
+**Demonstração:** [resume-timeline-sandy.vercel.app](https://resume-timeline-sandy.vercel.app)
+
+Cada pessoa que usar este template faz o próprio deploy (Vercel + banco de dados
+próprio) e edita o conteúdo por um painel administrativo, sem precisar mexer em código.
 
 ## Stack
 
