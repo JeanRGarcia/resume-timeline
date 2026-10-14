@@ -40,15 +40,18 @@ export default async function Home() {
   const appearance = getAppearance(profile);
 
   return (
+    // Below lg: header stacked above the timeline, page scrolls normally.
+    // lg and up: the page is exactly one screen tall — profile as a full-height left
+    // panel, timeline filling the rest.
     <div
-      className="min-h-screen flex-1"
+      className="min-h-screen flex-1 lg:flex lg:h-dvh lg:min-h-0 lg:flex-none lg:overflow-hidden"
       style={{ color: TEXT_COLOR_VALUES[appearance.textColor] }}
     >
       <RootCanvasStyle appearance={appearance} />
-      <div className="mx-auto w-full max-w-5xl px-4 pt-12 sm:px-8">
+      <div className="mx-auto w-full max-w-5xl px-4 pt-12 sm:px-8 lg:mx-0 lg:h-full lg:w-[22rem] lg:max-w-none lg:shrink-0 lg:p-4 xl:w-[26rem]">
         <ProfileHeader profile={profile} appearance={appearance} />
       </div>
-      <div className="mt-10">
+      <div className="mt-10 lg:mt-0 lg:h-full lg:min-w-0 lg:flex-1">
         <Timeline items={items} appearance={appearance} />
       </div>
     </div>

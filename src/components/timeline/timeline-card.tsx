@@ -50,7 +50,11 @@ export function TimelineCard({
   return (
     <div
       className={`flex w-72 flex-col rounded-xl border border-current/10 p-4 shadow-sm backdrop-blur-sm sm:w-80 ${
-        uniformHeight ? (expanded ? "min-h-64" : "h-64") : ""
+        uniformHeight
+          ? expanded
+            ? "min-h-64 lg:min-h-[18.5rem]"
+            : "h-64 lg:h-[18.5rem]"
+          : ""
       }`}
       style={{ backgroundColor: getCardBackground(appearance) }}
     >
@@ -107,7 +111,7 @@ export function TimelineCard({
       {item.description && (
         <p
           ref={descriptionRef}
-          className={`mt-2 whitespace-pre-line text-sm opacity-80 ${expanded ? "" : "line-clamp-4"}`}
+          className={`mt-2 whitespace-pre-line text-sm opacity-80 ${expanded ? "" : "line-clamp-4 lg:line-clamp-6"}`}
         >
           {item.description}
         </p>

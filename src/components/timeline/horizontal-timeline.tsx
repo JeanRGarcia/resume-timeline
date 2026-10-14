@@ -42,7 +42,7 @@ export function HorizontalTimeline({
       ref={scrollRef}
       onWheel={handleWheel}
       onScroll={handleScroll}
-      className="themed-scrollbar hidden overflow-x-auto pb-6 pt-2 sm:block"
+      className="themed-scrollbar hidden overflow-x-auto pb-6 pt-2 sm:block lg:flex lg:h-full lg:py-0"
     >
       {/*
         Three grid rows: cards above, the line with the dots, cards below. The dots live
@@ -50,7 +50,7 @@ export function HorizontalTimeline({
         never push a dot off the line. Each row is as tall as its tallest card.
       */}
       <div
-        className="grid w-max px-10"
+        className="grid w-max px-10 lg:my-auto lg:shrink-0 lg:py-6"
         style={{ gridTemplateColumns: `repeat(${items.length}, ${ITEM_WIDTH}px)` }}
       >
         <div

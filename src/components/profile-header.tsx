@@ -36,44 +36,51 @@ export function ProfileHeader({
   );
 
   return (
+    // On large screens this card is a full-height side panel: its content is centered
+    // vertically with my-auto (which, unlike justify-center, stays scrollable when a long
+    // bio is taller than the screen).
     <div
-      className="flex flex-col items-center gap-4 rounded-xl border border-current/10 p-6 text-center shadow-sm backdrop-blur-sm sm:flex-row sm:items-start sm:p-8 sm:text-left"
+      className="themed-scrollbar rounded-xl border border-current/10 p-6 shadow-sm backdrop-blur-sm sm:p-8 lg:flex lg:h-full lg:flex-col lg:overflow-y-auto"
       style={{ backgroundColor: getCardBackground(appearance) }}
     >
-      <Avatar className="h-24 w-24 border border-current/20">
-        <AvatarImage src={profile.avatarUrl ?? undefined} alt={profile.name} />
-        <AvatarFallback className="text-xl">{initials}</AvatarFallback>
-      </Avatar>
-      <div className="space-y-2">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
-            {profile.name}
-          </h1>
-          {profile.headline && <p className="text-lg opacity-80">{profile.headline}</p>}
-          {profile.location && (
-            <p className="flex items-center justify-center gap-1 text-sm opacity-70 sm:justify-start">
-              <MapPin className="h-3.5 w-3.5" />
-              {profile.location}
-            </p>
+      <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:items-start sm:text-left lg:my-auto lg:flex-col lg:items-start lg:gap-5">
+        <Avatar className="h-24 w-24 border border-current/20 lg:h-28 lg:w-28">
+          <AvatarImage src={profile.avatarUrl ?? undefined} alt={profile.name} />
+          <AvatarFallback className="text-xl">{initials}</AvatarFallback>
+        </Avatar>
+        <div className="space-y-2">
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">
+              {profile.name}
+            </h1>
+            {profile.headline && <p className="text-lg opacity-80">{profile.headline}</p>}
+            {profile.location && (
+              <p className="flex items-center justify-center gap-1 text-sm opacity-70 sm:justify-start">
+                <MapPin className="h-3.5 w-3.5" />
+                {profile.location}
+              </p>
+            )}
+          </div>
+          {profile.bio && (
+            <p className="max-w-2xl text-sm opacity-80 lg:max-w-none">{profile.bio}</p>
+          )}
+          {links.length > 0 && (
+            <div className="flex flex-wrap items-center justify-center gap-3 pt-1 sm:justify-start">
+              {links.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target={link.href.startsWith("http") ? "_blank" : undefined}
+                  rel="noreferrer"
+                  className="flex items-center gap-1.5 text-sm opacity-70 hover:opacity-100"
+                >
+                  <link.icon className="h-4 w-4" />
+                  {link.label}
+                </a>
+              ))}
+            </div>
           )}
         </div>
-        {profile.bio && <p className="max-w-2xl text-sm opacity-80">{profile.bio}</p>}
-        {links.length > 0 && (
-          <div className="flex flex-wrap items-center justify-center gap-3 pt-1 sm:justify-start">
-            {links.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                target={link.href.startsWith("http") ? "_blank" : undefined}
-                rel="noreferrer"
-                className="flex items-center gap-1.5 text-sm opacity-70 hover:opacity-100"
-              >
-                <link.icon className="h-4 w-4" />
-                {link.label}
-              </a>
-            ))}
-          </div>
-        )}
       </div>
     </div>
   );
