@@ -42,7 +42,7 @@ export function HorizontalTimeline({
       ref={scrollRef}
       onWheel={handleWheel}
       onScroll={handleScroll}
-      className="hidden overflow-x-auto pb-6 pt-2 sm:block [scrollbar-width:thin]"
+      className="themed-scrollbar hidden overflow-x-auto pb-6 pt-2 sm:block"
     >
       {/*
         Three grid rows: cards above, the line with the dots, cards below. The dots live

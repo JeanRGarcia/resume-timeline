@@ -128,3 +128,42 @@
     @apply font-sans;
   }
 }
+
+/*
+ * Scrollbars on the public page follow the text color the owner picked (black or
+ * white) instead of the browser default: a slim translucent thumb on a transparent
+ * track, so they blend into any background color or image.
+ */
+.themed-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, currentColor 40%, transparent) transparent;
+}
+
+/* The page's own (vertical) scrollbar belongs to <html>, which can't see the
+   wrapper's text color, so the public page marks itself with data-text-color. */
+html:has([data-text-color="black"]) {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(0 0 0 / 0.35) transparent;
+}
+
+html:has([data-text-color="white"]) {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(255 255 255 / 0.4) transparent;
+}
+
+/* Browsers without the standard scrollbar-color (older Safari) only understand
+   the WebKit pseudo-elements. */
+@supports not (scrollbar-color: auto) {
+  .themed-scrollbar::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  .themed-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .themed-scrollbar::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, currentColor 40%, transparent);
+    border-radius: 9999px;
+  }
+}
